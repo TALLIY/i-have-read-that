@@ -48,7 +48,7 @@ model User {
   name              String?
   email             String?        @unique
   emailVerified     DateTime?
-  createdSubreddits Subreddit[]    @relation("CreatedBy")
+  createdCommunities Community[]    @relation("CreatedBy")
   subscriptions     Subscription[]
   votes             Vote[]
 
@@ -62,7 +62,7 @@ model User {
   CommentVote CommentVote[]
 }
 
-model Subreddit {
+model Community{
   id        String   @id @default(cuid())
   name      String   @unique
   createdAt DateTime @default(now())
@@ -79,10 +79,10 @@ model Subreddit {
 model Subscription {
   user        User      @relation(fields: [userId], references: [id])
   userId      String
-  subreddit   Subreddit @relation(fields: [subredditId], references: [id])
-  subredditId String
+  community  Community @relation(fields: [communityId], references: [id])
+  communityId String
 
-  @@id([userId, subredditId])
+  @@id([userId, communityId])
 }
 
 model Post {
@@ -93,8 +93,8 @@ model Post {
   updatedAt   DateTime  @updatedAt
   author      User      @relation(fields: [authorId], references: [id])
   authorId    String
-  subreddit   Subreddit @relation(fields: [subredditId], references: [id])
-  subredditId String
+  community  Community @relation(fields: [communityId], references: [id])
+  communityId String
   comments    Comment[] 
   votes       Vote[]
 }
